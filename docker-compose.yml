@@ -1,0 +1,54 @@
+services:
+
+  mysql_arriendo:
+    image: mysql:8.0
+    container_name: mysql_arriendo
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: arriendo_db
+      MYSQL_USER: arriendo_user
+      MYSQL_PASSWORD: arriendo_pass
+      MYSQL_ROOT_PASSWORD: root_pass
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_arriendo_data:/var/lib/mysql
+    networks:
+      - microservices_network
+
+  mysql_cliente:
+    image: mysql:8.0
+    container_name: mysql_cliente
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: cliente_db
+      MYSQL_USER: cliente_user
+      MYSQL_PASSWORD: cliente_pass
+      MYSQL_ROOT_PASSWORD: root_pass
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql_cliente_data:/var/lib/mysql
+    networks:
+      - microservices_network
+
+  mysql_moto:
+    image: mysql:8.0
+    container_name: mysql_moto
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: moto_db
+      MYSQL_USER: moto_user
+      MYSQL_PASSWORD: moto_pass
+      MYSQL_ROOT_PASSWORD: root_pass
+    ports:
+      - "3309:3306"
+    volumes:
+      - mysql_moto_data:/var/lib/mysql
+    networks:
+      - microservices_network
+
+volumes:
+  mysql_arriendo_data:
+  mysql_cliente_data:
+  mysql_moto_data:
