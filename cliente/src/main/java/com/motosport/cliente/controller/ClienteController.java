@@ -16,8 +16,10 @@ import com.motosport.cliente.dto.ClienteDto;
 import com.motosport.cliente.dto.ResponseDto;
 import com.motosport.cliente.service.ClienteService;
 
+import jakarta.validation.Valid;
+
 @RestController
-@RequestMapping("/api/cliente")
+@RequestMapping("/api/clientes")
 public class ClienteController {
 
     private final ClienteService clienteService;
@@ -44,7 +46,7 @@ public class ClienteController {
 
     @PostMapping
     public ResponseEntity<ClienteDto> createCliente(
-            @RequestBody ClienteDto clienteDto) {
+            @Valid @RequestBody ClienteDto clienteDto) {
 
         ClienteDto createdCliente = clienteService.addCliente(clienteDto);
 
@@ -54,7 +56,7 @@ public class ClienteController {
     @PutMapping("/{id}")
     public ResponseEntity<ClienteDto> updateCliente(
             @PathVariable Long id,
-            @RequestBody ClienteDto clienteDto) {
+            @Valid @RequestBody ClienteDto clienteDto) {
 
         ClienteDto updatedCliente =
                 clienteService.updateCliente(id, clienteDto);

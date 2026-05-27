@@ -52,3 +52,7 @@ volumes:
   mysql_arriendo_data:
   mysql_cliente_data:
   mysql_moto_data:
+
+networks:
+  microservices_network:
+    driver: bridge

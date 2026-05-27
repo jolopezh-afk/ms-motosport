@@ -1,0 +1,83 @@
+@baseUrl = http://localhost:4001
+@arriendosUrl = {{baseUrl}}/api/arriendos
+@authUrl = {{baseUrl}}/api/auth
+
+### =========================
+### AUTH ENDPOINTS
+### =========================
+
+### Registrar usuario
+POST {{authUrl}}/register
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "123456"
+}
+
+###
+
+### Login
+POST {{authUrl}}/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "123456"
+}
+
+###
+
+### Validar token
+GET {{authUrl}}/validate
+Authorization: Bearer TU_TOKEN_AQUI
+
+### =========================
+### ARRIENDOS ENDPOINTS
+### =========================
+
+### Obtener todos los arriendos
+GET {{arriendosUrl}}
+Authorization: Bearer TU_TOKEN_AQUI
+
+###
+
+### Obtener arriendo por ID
+GET {{arriendosUrl}}/1
+Authorization: Bearer TU_TOKEN_AQUI
+
+###
+
+### Crear arriendo
+POST {{arriendosUrl}}
+Content-Type: application/json
+Authorization: Bearer TU_TOKEN_AQUI
+
+{
+  "motoId": 1,
+  "clienteId": 1,
+  "fechaInicio": "2026-05-27",
+  "fechaFin": "2026-05-30",
+  "observacion": "Arriendo de prueba"
+}
+
+###
+
+### Actualizar arriendo
+PUT {{arriendosUrl}}/1
+Content-Type: application/json
+Authorization: Bearer TU_TOKEN_AQUI
+
+{
+  "motoId": 1,
+  "clienteId": 1,
+  "fechaInicio": "2026-05-27",
+  "fechaFin": "2026-06-02",
+  "observacion": "Arriendo actualizado"
+}
+
+###
+
+### Eliminar arriendo
+DELETE {{arriendosUrl}}/1
+Authorization: Bearer TU_TOKEN_AQUI

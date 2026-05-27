@@ -16,8 +16,10 @@ import com.motosport.moto.dto.MotoDto;
 import com.motosport.moto.dto.ResponseDto;
 import com.motosport.moto.service.MotoService;
 
+import jakarta.validation.Valid;
+
 @RestController
-@RequestMapping("/api/moto")
+@RequestMapping("/api/motos")
 public class MotoController {
 
     private final MotoService motoService;
@@ -39,7 +41,7 @@ public class MotoController {
     }
 
     @PostMapping
-    public ResponseEntity<MotoDto> createMoto(@RequestBody MotoDto motoDto) {
+    public ResponseEntity<MotoDto> createMoto(@Valid @RequestBody MotoDto motoDto) {
         MotoDto createdMoto = motoService.addMoto(motoDto);
         return ResponseEntity.ok(createdMoto);
     }
@@ -47,7 +49,7 @@ public class MotoController {
     @PutMapping("/{id}")
     public ResponseEntity<MotoDto> updateMoto(
             @PathVariable Long id,
-            @RequestBody MotoDto motoDto) {
+            @Valid @RequestBody MotoDto motoDto) {
 
         MotoDto updatedMoto = motoService.updateMoto(id, motoDto);
         return ResponseEntity.ok(updatedMoto);

@@ -1,4 +1,4 @@
-package com.motosport.cliente.dto;
+package com.motosport.arriendo.dto;
 
 import java.time.LocalDate;
 
