@@ -1,4 +1,4 @@
-package com.bikesport.bike;
+package com.motosport.bike;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

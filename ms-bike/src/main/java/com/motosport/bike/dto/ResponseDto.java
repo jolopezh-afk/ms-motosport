@@ -1,4 +1,4 @@
-package com.bikesport.bike.dto;
+package com.motosport.bike.dto;
 
 public record ResponseDto(
         String message

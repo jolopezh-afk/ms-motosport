@@ -1,4 +1,4 @@
-package com.bikesport.bike.controller;
+package com.motosport.bike.controller;
 
 import java.util.List;
 
@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bikesport.bike.dto.BikeDto;
-import com.bikesport.bike.dto.ResponseDto;
-import com.bikesport.bike.service.BikeService;
+import com.motosport.bike.dto.BikeDto;
+import com.motosport.bike.dto.ResponseDto;
+import com.motosport.bike.service.BikeService;
 
 import jakarta.validation.Valid;
 

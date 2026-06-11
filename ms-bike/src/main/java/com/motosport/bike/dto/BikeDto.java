@@ -1,4 +1,4 @@
-package com.bikesport.bike.dto;
+package com.motosport.bike.dto;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

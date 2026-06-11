@@ -1,8 +1,8 @@
-package com.bikesport.bike.repository;
+package com.motosport.bike.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.bikesport.bike.model.Bike;
+import com.motosport.bike.model.Bike;
 
 public interface BikeRepository extends JpaRepository<Bike, Long>{
 

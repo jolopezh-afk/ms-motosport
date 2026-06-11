@@ -1,13 +1,13 @@
-package com.bikesport.bike.service;
+package com.motosport.bike.service;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.bikesport.bike.dto.BikeDto;
-import com.bikesport.bike.dto.ResponseDto;
-import com.bikesport.bike.model.Bike;
-import com.bikesport.bike.repository.BikeRepository;
+import com.motosport.bike.dto.BikeDto;
+import com.motosport.bike.dto.ResponseDto;
+import com.motosport.bike.model.Bike;
+import com.motosport.bike.repository.BikeRepository;
 
 @Service
 public class BikeServiceImpl implements BikeService{
