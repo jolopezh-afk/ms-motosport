@@ -6,15 +6,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
-import com.motosport.rent.dto.MotoDto;
+import com.motosport.rent.dto.BikeDto;
 
 @Component
-public class MotoClientImpl implements MotoClient {
+public class BikeClientImpl implements BikeClient {
 
     private final RestClient restClient;
 
-    public MotoClientImpl(
-            @Value("${api.moto.baseUrl}") String baseUrl) {
+    public BikeClientImpl(
+            @Value("${api.bike.baseUrl}") String baseUrl) {
 
         this.restClient = RestClient.builder()
                 .baseUrl(baseUrl)
@@ -22,14 +22,14 @@ public class MotoClientImpl implements MotoClient {
     }
 
     @Override
-    public MotoDto getMotoById(Long id) {
+    public BikeDto getBikeById(Long id) {
 
-        ResponseEntity<MotoDto> response = restClient.get()
-                .uri("/api/motos/{id}", id)
+        ResponseEntity<BikeDto> response = restClient.get()
+                .uri("/api/bikes/{id}", id)
                 .retrieve()
-                .toEntity(MotoDto.class);
+                .toEntity(BikeDto.class);
 
-        MotoDto body = response.getBody();
+        BikeDto body = response.getBody();
 
         HttpStatusCode status = response.getStatusCode();
 
@@ -38,19 +38,19 @@ public class MotoClientImpl implements MotoClient {
         }
 
         throw new RuntimeException(
-                "Error al obtener moto: " + status);
+                "Error al obtener bike: " + status);
     }
 
     @Override
-    public MotoDto updateMoto(Long id, MotoDto motoDto) {
+    public BikeDto updateBike(Long id, BikeDto bikeDto) {
 
-        ResponseEntity<MotoDto> response = restClient.put()
-                .uri("/api/motos/{id}", id)
-                .body(motoDto)
+        ResponseEntity<BikeDto> response = restClient.put()
+                .uri("/api/bikes/{id}", id)
+                .body(bikeDto)
                 .retrieve()
-                .toEntity(MotoDto.class);
+                .toEntity(BikeDto.class);
 
-        MotoDto body = response.getBody();
+        BikeDto body = response.getBody();
 
         HttpStatusCode status = response.getStatusCode();
 
@@ -59,6 +59,6 @@ public class MotoClientImpl implements MotoClient {
         }
 
         throw new RuntimeException(
-                "Error al actualizar moto: " + status);
+                "Error al actualizar bike: " + status);
     }
 }

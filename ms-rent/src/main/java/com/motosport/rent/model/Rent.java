@@ -20,11 +20,11 @@ public class Rent {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "El ID de la moto es obligatorio")
-    private Long motoId;
+    @NotNull(message = "El ID de la bike es obligatorio")
+    private Long bikeId;
 
-    @NotNull(message = "El ID del cliente es obligatorio")
-    private Long clienteId;
+    @NotNull(message = "El ID del customer es obligatorio")
+    private Long customerId;
 
     @NotNull(message = "La fecha de inicio es obligatoria")
     @FutureOrPresent(message = "La fecha de inicio no puede ser pasada")
@@ -39,13 +39,13 @@ public class Rent {
     public Rent() {
     }
 
-    public Rent(Long id, Long motoId, Long clienteId,
+    public Rent(Long id, Long bikeId, Long customerId,
                      LocalDate fechaInicio, LocalDate fechaFin,
                      String observacion) {
 
         this.id = id;
-        this.motoId = motoId;
-        this.clienteId = clienteId;
+        this.bikeId = bikeId;
+        this.customerId = customerId;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
         this.observacion = observacion;
@@ -59,20 +59,20 @@ public class Rent {
         this.id = id;
     }
 
-    public Long getMotoId() {
-        return motoId;
+    public Long getBikeId() {
+        return bikeId;
     }
 
-    public void setMotoId(Long motoId) {
-        this.motoId = motoId;
+    public void setBikeId(Long bikeId) {
+        this.bikeId = bikeId;
     }
 
-    public Long getClienteId() {
-        return clienteId;
+    public Long getCustomerId() {
+        return customerId;
     }
 
-    public void setClienteId(Long clienteId) {
-        this.clienteId = clienteId;
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
 
     public LocalDate getFechaInicio() {

@@ -6,15 +6,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
-import com.motosport.rent.dto.ClienteDto;
+import com.motosport.rent.dto.CustomerDto;
 
 @Component
-public class ClienteClientImpl implements ClienteClient {
+public class CustomerClientImpl implements CustomerClient {
 
     private final RestClient restClient;
 
-    public ClienteClientImpl(
-            @Value("${api.cliente.baseUrl}") String baseUrl) {
+    public CustomerClientImpl(
+            @Value("${api.customer.baseUrl}") String baseUrl) {
 
         this.restClient = RestClient.builder()
                 .baseUrl(baseUrl)
@@ -22,14 +22,14 @@ public class ClienteClientImpl implements ClienteClient {
     }
 
     @Override
-    public ClienteDto getClienteById(Long id) {
+    public CustomerDto getCustomerById(Long id) {
 
-        ResponseEntity<ClienteDto> response = restClient.get()
-                .uri("/api/clientes/{id}", id)
+        ResponseEntity<CustomerDto> response = restClient.get()
+                .uri("/api/customers/{id}", id)
                 .retrieve()
-                .toEntity(ClienteDto.class);
+                .toEntity(CustomerDto.class);
 
-        ClienteDto body = response.getBody();
+        CustomerDto body = response.getBody();
 
         HttpStatusCode status = response.getStatusCode();
 
@@ -38,6 +38,6 @@ public class ClienteClientImpl implements ClienteClient {
         }
 
         throw new RuntimeException(
-                "Error al obtener cliente: " + status);
+                "Error al obtener customer: " + status);
     }
 }

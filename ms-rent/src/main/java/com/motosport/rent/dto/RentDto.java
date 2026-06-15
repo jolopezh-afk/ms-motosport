@@ -10,11 +10,11 @@ public record RentDto(
 
     Long id,
 
-    @NotNull(message = "El ID de la moto es obligatorio")
-    Long motoId,
+    @NotNull(message = "El ID de la bike es obligatorio")
+    Long bikeId,
 
-    @NotNull(message = "El ID del cliente es obligatorio")
-    Long clienteId,
+    @NotNull(message = "El ID del customer es obligatorio")
+    Long customerId,
 
     @NotNull(message = "La fecha de inicio es obligatoria")
     @FutureOrPresent(message = "La fecha de inicio no puede ser pasada")

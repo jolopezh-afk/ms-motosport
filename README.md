@@ -1,13 +1,13 @@
 # ms-motosport
-# 🏍️ MotoSport Microservices
+# 🏍️ BikeSport Microservices
 
-Sistema de arriendo de motos desarrollado con arquitectura de microservicios utilizando Spring Boot, JWT y MySQL.
+Sistema de arriendo de bikes desarrollado con arquitectura de microservicios utilizando Spring Boot, JWT y MySQL.
 
 ---
 
 # 📌 Descripción
 
-MotoSport es una plataforma de arriendo de motos basada en microservicios.
+BikeSport es una plataforma de arriendo de bikes basada en microservicios.
 
 El microservicio principal es:
 
@@ -16,8 +16,8 @@ El microservicio principal es:
 Este servicio:
 - centraliza la lógica de negocio,
 - autentica usuarios con JWT,
-- consulta clientes,
-- consulta motos,
+- consulta customers,
+- consulta bikes,
 - valida disponibilidad,
 - gestiona arriendos.
 
@@ -55,14 +55,14 @@ Funciones:
 - CRUD de arriendos
 - JWT Authentication
 - Login y registro
-- Consulta Cliente MS
-- Consulta Moto MS
+- Consulta Customer MS
+- Consulta Bike MS
 - Validación de disponibilidad
-- Cambio automático de disponibilidad de motos
+- Cambio automático de disponibilidad de bikes
 
 ---
 
-## 👤 Cliente Service
+## 👤 Customer Service
 
 Puerto:
 
@@ -71,13 +71,13 @@ Puerto:
 ```
 
 Funciones:
-- CRUD de clientes
+- CRUD de customers
 - Validaciones
 - Gestión de licencias
 
 ---
 
-## 🏍️ Moto Service
+## 🏍️ Bike Service
 
 Puerto:
 
@@ -86,7 +86,7 @@ Puerto:
 ```
 
 Funciones:
-- CRUD de motos
+- CRUD de bikes
 - Control de disponibilidad
 - Gestión de kilometraje
 

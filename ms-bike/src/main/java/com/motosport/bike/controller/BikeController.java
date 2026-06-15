@@ -20,7 +20,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 @RequestMapping("/api/bikes")
 @Tag(
     name = "Bikes",
-    description = "CRUD de bicicletas del microservicio de motos"
+    description = "CRUD de bicicletas del microservicio de bikes"
 )
 public class BikeController {
 

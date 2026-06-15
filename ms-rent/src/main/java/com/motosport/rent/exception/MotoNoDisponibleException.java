@@ -2,9 +2,9 @@ package com.motosport.rent.exception;
 
 import org.springframework.http.HttpStatus;
 
-public class MotoNoDisponibleException extends ApiException {
+public class BikeNoDisponibleException extends ApiException {
 
-    public MotoNoDisponibleException(String message) {
+    public BikeNoDisponibleException(String message) {
 
         super(
                 "MOTO_NO_DISPONIBLE",

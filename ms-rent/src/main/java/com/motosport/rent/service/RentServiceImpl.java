@@ -4,13 +4,13 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.motosport.rent.client.ClienteClient;
-import com.motosport.rent.client.MotoClient;
+import com.motosport.rent.client.CustomerClient;
+import com.motosport.rent.client.BikeClient;
 import com.motosport.rent.dto.RentDto;
-import com.motosport.rent.dto.ClienteDto;
-import com.motosport.rent.dto.MotoDto;
+import com.motosport.rent.dto.CustomerDto;
+import com.motosport.rent.dto.BikeDto;
 import com.motosport.rent.dto.ResponseDto;
-import com.motosport.rent.exception.MotoNoDisponibleException;
+import com.motosport.rent.exception.BikeNoDisponibleException;
 import com.motosport.rent.model.Rent;
 import com.motosport.rent.repository.RentRepository;
 
@@ -18,28 +18,28 @@ import com.motosport.rent.repository.RentRepository;
 public class RentServiceImpl implements RentService {
     
     private final RentRepository repository;
-    private final ClienteClient clienteClient;
-    private final MotoClient motoClient;
+    private final CustomerClient customerClient;
+    private final BikeClient bikeClient;
 
     public RentServiceImpl(
             RentRepository repository,
-            ClienteClient clienteClient,
-            MotoClient motoClient) {
+            CustomerClient customerClient,
+            BikeClient bikeClient) {
 
         this.repository = repository;
-        this.clienteClient = clienteClient;
-        this.motoClient = motoClient;
+        this.customerClient = customerClient;
+        this.bikeClient = bikeClient;
     }
 
     @Override
     public RentDto addRent(RentDto dto) {
-        clienteClient.getClienteById(dto.clienteId());
+        customerClient.getCustomerById(dto.customerId());
 
-        MotoDto moto =
-                motoClient.getMotoById(dto.motoId());
+        BikeDto bike =
+                bikeClient.getBikeById(dto.bikeId());
 
-        if (!moto.disponibilidad()) {
-            throw new MotoNoDisponibleException("Moto no disponible");
+        if (!bike.disponibilidad()) {
+            throw new BikeNoDisponibleException("Bike no disponible");
         }
 
         if (dto.fechaFin().isBefore(dto.fechaInicio())) {
@@ -47,21 +47,21 @@ public class RentServiceImpl implements RentService {
                     "La fecha fin no puede ser menor a la fecha inicio");
         }
 
-        MotoDto motoActualizada = new MotoDto(
-                moto.id(),
-                moto.marca(),
-                moto.modelo(),
-                moto.patente(),
-                moto.valor(),
-                moto.annio(),
-                moto.color(),
-                moto.kilometraje(),
+        BikeDto bikeActualizada = new BikeDto(
+                bike.id(),
+                bike.marca(),
+                bike.modelo(),
+                bike.patente(),
+                bike.valor(),
+                bike.annio(),
+                bike.color(),
+                bike.kilometraje(),
                 false
         );
 
-        motoClient.updateMoto(
-                moto.id(),
-                motoActualizada
+        bikeClient.updateBike(
+                bike.id(),
+                bikeActualizada
         );
         Rent rent =
                 repository.save(dtoToModel(dto));
@@ -89,8 +89,8 @@ public class RentServiceImpl implements RentService {
         Rent rent = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Rent no encontrado"));
 
-        rent.setMotoId(dto.motoId());
-        rent.setClienteId(dto.clienteId());
+        rent.setBikeId(dto.bikeId());
+        rent.setCustomerId(dto.customerId());
         rent.setFechaInicio(dto.fechaInicio());
         rent.setFechaFin(dto.fechaFin());
         rent.setObservacion(dto.observacion());
@@ -105,21 +105,21 @@ public class RentServiceImpl implements RentService {
         Rent rent = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Rent no encontrado"));
 
-        MotoDto moto = motoClient.getMotoById(rent.getMotoId());
+        BikeDto bike = bikeClient.getBikeById(rent.getBikeId());
 
-        MotoDto motoActualizada = new MotoDto(
-                moto.id(),
-                moto.marca(),
-                moto.modelo(),
-                moto.patente(),
-                moto.valor(),
-                moto.annio(),
-                moto.color(),
-                moto.kilometraje(),
+        BikeDto bikeActualizada = new BikeDto(
+                bike.id(),
+                bike.marca(),
+                bike.modelo(),
+                bike.patente(),
+                bike.valor(),
+                bike.annio(),
+                bike.color(),
+                bike.kilometraje(),
                 true
         );
 
-        motoClient.updateMoto(moto.id(), motoActualizada);
+        bikeClient.updateBike(bike.id(), bikeActualizada);
 
         repository.deleteById(id);
 
@@ -129,8 +129,8 @@ public class RentServiceImpl implements RentService {
     private RentDto modelToDto(Rent model) {
         return new RentDto(
                 model.getId(),
-                model.getMotoId(),
-                model.getClienteId(),
+                model.getBikeId(),
+                model.getCustomerId(),
                 model.getFechaInicio(),
                 model.getFechaFin(),
                 model.getObservacion()
@@ -140,8 +140,8 @@ public class RentServiceImpl implements RentService {
     private Rent dtoToModel(RentDto dto) {
         Rent rent = new Rent();
         rent.setId(dto.id());
-        rent.setMotoId(dto.motoId());
-        rent.setClienteId(dto.clienteId());
+        rent.setBikeId(dto.bikeId());
+        rent.setCustomerId(dto.customerId());
         rent.setFechaInicio(dto.fechaInicio());
         rent.setFechaFin(dto.fechaFin());
         rent.setObservacion(dto.observacion());

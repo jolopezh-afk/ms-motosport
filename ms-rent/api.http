@@ -54,8 +54,8 @@ Content-Type: application/json
 Authorization: Bearer TU_TOKEN_AQUI
 
 {
-  "motoId": 1,
-  "clienteId": 1,
+  "bikeId": 1,
+  "customerId": 1,
   "fechaInicio": "2026-05-27",
   "fechaFin": "2026-05-30",
   "observacion": "Rent de prueba"
@@ -69,8 +69,8 @@ Content-Type: application/json
 Authorization: Bearer TU_TOKEN_AQUI
 
 {
-  "motoId": 1,
-  "clienteId": 1,
+  "bikeId": 1,
+  "customerId": 1,
   "fechaInicio": "2026-05-27",
   "fechaFin": "2026-06-02",
   "observacion": "Rent actualizado"
