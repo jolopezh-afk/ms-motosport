@@ -1,8 +1,12 @@
 package com.motosport.bff.client;
 
+import com.motosport.bff.dto.BikeDto;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
+
+import java.util.List;
 
 @Component
 public class BikeClient {
@@ -30,18 +34,18 @@ public class BikeClient {
                 .body(BikeDto.class);
     }
 
-    public BikeDto create(BikeDto request) {
+    public BikeDto create(BikeDto dto) {
         return restClient.post()
                 .uri(bikeUrl + "/api/bikes")
-                .body(request)
+                .body(dto)
                 .retrieve()
                 .body(BikeDto.class);
     }
 
-    public BikeDto update(Long id, BikeDto request) {
+    public BikeDto update(Long id, BikeDto dto) {
         return restClient.put()
                 .uri(bikeUrl + "/api/bikes/{id}", id)
-                .body(request)
+                .body(dto)
                 .retrieve()
                 .body(BikeDto.class);
     }
