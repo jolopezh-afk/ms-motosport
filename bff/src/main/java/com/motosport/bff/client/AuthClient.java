@@ -20,18 +20,18 @@ public class AuthClient {
 
 	public AuthResponse login(LoginRequest request) {
 		return restClient.post()
-			.uri(authBaseUrl + "/login")
+			.uri(authBaseUrl + "/api/auth/login")
 			.body(request)
 			.retrieve()
 			.body(AuthResponse.class);
 	}
 
-	public AuthResponse register(RegisterRequest request) {
-		return restClient.post()
-			.uri(authBaseUrl + "/register")
+	public void register(RegisterRequest request) {
+		restClient.post()
+			.uri(authBaseUrl + "/api/auth/register")
 			.body(request)
 			.retrieve()
-			.body(AuthResponse.class);
+			.toBodilessEntity();
 	}
 }
 

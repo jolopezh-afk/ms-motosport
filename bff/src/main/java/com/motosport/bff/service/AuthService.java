@@ -20,6 +20,7 @@ public class AuthService {
 	}
 
 	public AuthResponse register(RegisterRequest request) {
-		return authClient.register(request);
+		authClient.register(request);
+		return authClient.login(new LoginRequest(request.email(), request.password()));
 	}
 }

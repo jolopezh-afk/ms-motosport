@@ -1,0 +1,371 @@
+### =========================================================
+### BikeSport - Pruebas de endpoints a través del BFF
+### =========================================================
+### Cómo usarlo:
+### - VS Code: instala la extensión "REST Client" (humao.rest-client) y
+###   haz clic en "Send Request" sobre cada bloque (###).
+### - IntelliJ / Ultimate: este mismo formato lo entiende nativo (HTTP Client).
+### - Corre todo en orden: primero login/register, luego copia el
+###   accessToken en la variable @token antes de probar el resto.
+### =========================================================
+
+@bffUrl = http://localhost:8080
+@authUrl = http://localhost:4004
+
+### Variable a completar manualmente después del login (paso 3)
+@token = PEGA_AQUI_EL_ACCESS_TOKEN
+
+
+### =========================================================
+### 1. HEALTH CHECK (público, no requiere token)
+### =========================================================
+
+### 1.1 Health del BFF
+GET {{bffUrl}}/api/health
+
+
+### =========================================================
+### 2. REGISTRO (público) - vía BFF
+### =========================================================
+
+### 2.1 Registrar un usuario nuevo
+# El BFF reenvía a ms-auth /api/auth/register y luego hace login automático,
+# así que la respuesta ya debería traer el accessToken.
+POST {{bffUrl}}/register
+Content-Type: application/json
+
+{
+  "name": "Juan Perez",
+  "email": "juan.perez@test.com",
+  "password": "Password123"
+}
+
+### 2.2 Registrar el mismo email de nuevo -> debe fallar (email duplicado)
+# Nota: hoy el BFF no traduce el error de ms-auth (IllegalArgumentException),
+# por lo que probablemente veas 500 en vez de 409/400. Ver README "Known issues".
+POST {{bffUrl}}/register
+Content-Type: application/json
+
+{
+  "name": "Juan Perez",
+  "email": "juan.perez@test.com",
+  "password": "Password123"
+}
+
+### 2.3 Registro con datos inválidos (email mal formado, password corta)
+# Debe fallar con 400 por validación de Bean Validation (@Valid) en el BFF,
+# sin llegar siquiera a llamar a ms-auth.
+POST {{bffUrl}}/register
+Content-Type: application/json
+
+{
+  "name": "J",
+  "email": "no-es-un-email",
+  "password": "123"
+}
+
+
+### =========================================================
+### 3. LOGIN - vía BFF (foco principal de la verificación)
+### =========================================================
+
+### 3.1 Login correcto
+# Copia el "accessToken" de la respuesta y pégalo en la variable @token
+# al inicio de este archivo antes de seguir con las secciones 4, 5 y 6.
+POST {{bffUrl}}/login
+Content-Type: application/json
+
+{
+  "email": "juan.perez@test.com",
+  "password": "Password123"
+}
+
+### 3.2 Login con contraseña incorrecta -> debe fallar (401 Unauthorized)
+POST {{bffUrl}}/login
+Content-Type: application/json
+
+{
+  "email": "juan.perez@test.com",
+  "password": "ContraseñaMala1"
+}
+
+### 3.3 Login con email que no existe -> debe fallar (401 Unauthorized)
+POST {{bffUrl}}/login
+Content-Type: application/json
+
+{
+  "email": "no-existo@test.com",
+  "password": "Password123"
+}
+
+### 3.4 Login con body inválido (falta password) -> 400 Bad Request
+POST {{bffUrl}}/login
+Content-Type: application/json
+
+{
+  "email": "juan.perez@test.com"
+}
+
+### 3.5 (Diagnóstico) Login directo contra ms-auth, sin pasar por el BFF
+# Útil para aislar si un problema de login está en ms-auth o en el BFF.
+POST {{authUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "juan.perez@test.com",
+  "password": "Password123"
+}
+
+### 3.6 (Diagnóstico) Ver las llaves públicas JWK que expone ms-auth
+# El BFF usa esta URL (jwk-set-uri) para validar la firma de los tokens.
+GET {{authUrl}}/.well-known/jwks.json
+
+
+### =========================================================
+### 4. ENDPOINTS PROTEGIDOS SIN TOKEN -> deben fallar con 401
+### =========================================================
+
+### 4.1 Listar bikes sin Authorization
+GET {{bffUrl}}/bikes
+
+### 4.2 Listar customers sin Authorization
+GET {{bffUrl}}/customers
+
+### 4.3 Listar rents sin Authorization
+GET {{bffUrl}}/rents
+
+### 4.4 Con un token con formato inválido (basura) -> 401
+GET {{bffUrl}}/bikes
+Authorization: Bearer token-que-no-es-un-jwt-valido
+
+
+### =========================================================
+### 5. BIKES (requiere @token válido de la sección 3.1)
+### =========================================================
+
+### 5.1 Listar todas las bikes
+GET {{bffUrl}}/bikes
+Authorization: Bearer {{token}}
+
+### 5.2 Crear una bike
+POST {{bffUrl}}/bikes
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "marca": "Yamaha",
+  "modelo": "MT-07",
+  "patente": "ABC123",
+  "valor": 350000,
+  "anio": 2023,
+  "color": "Negro",
+  "kilometraje": 1200,
+  "disponibilidad": true
+}
+
+### 5.3 Obtener bike por ID (ajusta el id según lo que devolvió 5.2)
+GET {{bffUrl}}/bikes/1
+Authorization: Bearer {{token}}
+
+### 5.4 Obtener bike con ID inexistente -> debe fallar (404 esperado)
+GET {{bffUrl}}/bikes/99999
+Authorization: Bearer {{token}}
+
+### 5.5 Crear bike con datos inválidos (patente mal formada) -> 400
+POST {{bffUrl}}/bikes
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "marca": "",
+  "modelo": "MT-07",
+  "patente": "ab-1",
+  "valor": -100,
+  "anio": 1800,
+  "color": "Negro",
+  "kilometraje": -5,
+  "disponibilidad": true
+}
+
+### 5.6 Actualizar bike (ajusta el id)
+PUT {{bffUrl}}/bikes/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "marca": "Yamaha",
+  "modelo": "MT-07",
+  "patente": "ABC123",
+  "valor": 340000,
+  "anio": 2023,
+  "color": "Azul",
+  "kilometraje": 1500,
+  "disponibilidad": true
+}
+
+### 5.7 Eliminar bike (ajusta el id)
+DELETE {{bffUrl}}/bikes/1
+Authorization: Bearer {{token}}
+
+
+### =========================================================
+### 6. CUSTOMERS (requiere @token válido de la sección 3.1)
+### =========================================================
+
+### 6.1 Listar todos los customers
+GET {{bffUrl}}/customers
+Authorization: Bearer {{token}}
+
+### 6.2 Crear un customer (licencia vigente a futuro)
+POST {{bffUrl}}/customers
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "rut": "12345678-9",
+  "nombre": "Maria",
+  "apellidos": "Gonzalez Soto",
+  "numeroTelefono": 987654321,
+  "correo": "maria.gonzalez@test.com",
+  "nroLicencia": "LIC-000123",
+  "fechaVencimiento": "2027-12-31",
+  "fechaRegistro": "2026-01-01"
+}
+
+### 6.3 Obtener customer por ID (ajusta el id según 6.2)
+GET {{bffUrl}}/customers/1
+Authorization: Bearer {{token}}
+
+### 6.4 Crear customer con licencia vencida (fecha en el pasado) -> 400
+POST {{bffUrl}}/customers
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "rut": "11111111-1",
+  "nombre": "Pedro",
+  "apellidos": "Test Vencido",
+  "numeroTelefono": 912345678,
+  "correo": "pedro.vencido@test.com",
+  "nroLicencia": "LIC-000999",
+  "fechaVencimiento": "2020-01-01",
+  "fechaRegistro": "2026-01-01"
+}
+
+### 6.5 Actualizar customer (ajusta el id)
+PUT {{bffUrl}}/customers/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "rut": "12345678-9",
+  "nombre": "Maria",
+  "apellidos": "Gonzalez Soto",
+  "numeroTelefono": 987654322,
+  "correo": "maria.gonzalez@test.com",
+  "nroLicencia": "LIC-000123",
+  "fechaVencimiento": "2028-01-01",
+  "fechaRegistro": "2026-01-01"
+}
+
+### 6.6 Eliminar customer (ajusta el id)
+DELETE {{bffUrl}}/customers/1
+Authorization: Bearer {{token}}
+
+
+### =========================================================
+### 7. RENTS (orquestación BFF: valida bike + customer antes de crear)
+### =========================================================
+### IMPORTANTE: para probar esta sección con éxito necesitas primero:
+###   - Una bike creada y con disponibilidad = true (sección 5.2)
+###   - Un customer creado con fechaVencimiento futura (sección 6.2)
+### Ajusta bikeId / customerId según los IDs reales que te devolvieron.
+
+### 7.1 Listar todos los rents
+GET {{bffUrl}}/rents
+Authorization: Bearer {{token}}
+
+### 7.2 Crear un rent (happy path)
+# El BFF debe: validar que la bike esté disponible, que la licencia del
+# customer no esté vencida, que fechaFin >= fechaInicio, crear el rent en
+# ms-rent, y marcar la bike como no disponible en ms-bike.
+POST {{bffUrl}}/rents
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "bikeId": 1,
+  "customerId": 1,
+  "fechaInicio": "2026-07-05",
+  "fechaFin": "2026-07-10",
+  "observacion": "Arriendo de prueba end-to-end"
+}
+
+### 7.3 Verificar que la bike quedó marcada como no disponible
+GET {{bffUrl}}/bikes/1
+Authorization: Bearer {{token}}
+
+### 7.4 Intentar arrendar la MISMA bike de nuevo -> debe fallar
+# ("La bike no está disponible")
+POST {{bffUrl}}/rents
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "bikeId": 1,
+  "customerId": 1,
+  "fechaInicio": "2026-07-11",
+  "fechaFin": "2026-07-15",
+  "observacion": "No debería poder crearse"
+}
+
+### 7.5 Crear rent con fechaFin anterior a fechaInicio -> debe fallar
+POST {{bffUrl}}/rents
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "bikeId": 2,
+  "customerId": 1,
+  "fechaInicio": "2026-07-20",
+  "fechaFin": "2026-07-01",
+  "observacion": "Fechas invertidas"
+}
+
+### 7.6 Crear rent con customer de licencia vencida (usa el customer de 6.4) -> debe fallar
+POST {{bffUrl}}/rents
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "bikeId": 2,
+  "customerId": 2,
+  "fechaInicio": "2026-07-05",
+  "fechaFin": "2026-07-10",
+  "observacion": "Licencia vencida"
+}
+
+### 7.7 Crear rent con bikeId inexistente -> debe fallar (404 esperado desde ms-bike)
+POST {{bffUrl}}/rents
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "bikeId": 99999,
+  "customerId": 1,
+  "fechaInicio": "2026-07-05",
+  "fechaFin": "2026-07-10",
+  "observacion": "Bike inexistente"
+}
+
+### 7.8 Obtener rent por ID (ajusta el id según 7.2)
+GET {{bffUrl}}/rents/1
+Authorization: Bearer {{token}}
+
+### 7.9 Eliminar rent (ajusta el id) - debe devolver la bike a disponible=true
+DELETE {{bffUrl}}/rents/1
+Authorization: Bearer {{token}}
+
+### 7.10 Verificar que la bike volvió a estar disponible tras el borrado
+GET {{bffUrl}}/bikes/1
+Authorization: Bearer {{token}}
