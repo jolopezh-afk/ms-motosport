@@ -26,12 +26,10 @@ import com.motosport.auth.dto.LoginRequest;
 import com.motosport.auth.dto.RegisterRequest;
 import com.motosport.auth.repository.UserAccountRepository;
 
-// Integra Mockito con JUnit 5.
-// Gracias a esta anotacion, los campos con @Mock se crean automaticamente antes de cada test.
+
 @ExtendWith(MockitoExtension.class)
 class AuthServiceTest {
 
-	// Mock: reemplaza las dependencias reales por dobles de prueba controlables.
 	@Mock
 	private UserAccountRepository userAccountRepository;
 

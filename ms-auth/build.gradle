@@ -25,7 +25,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
-
+    runtimeOnly 'com.mysql:mysql-connector-j'
     // Requerido por JwtKeyConfig/JwtService/JwksController (firma RS256 con Nimbus).
     // No estaba declarado, aunque el codigo fuente ya lo usaba: el modulo no compilaba.
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'

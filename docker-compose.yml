@@ -48,10 +48,27 @@ services:
     networks:
       - microservices_network
 
+  mysql_auth:
+    image: mysql:8.0
+    container_name: mysql_auth
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: auth_db
+      MYSQL_USER: auth_user
+      MYSQL_PASSWORD: auth_pass
+      MYSQL_ROOT_PASSWORD: root_pass
+    ports:
+      - "3310:3306"
+    volumes:
+      - mysql_auth_data:/var/lib/mysql
+    networks:
+      - microservices_network
+
 volumes:
   mysql_rent_data:
   mysql_customer_data:
   mysql_bike_data:
+  mysql_auth_data:
 
 networks:
   microservices_network:

@@ -21,10 +21,6 @@ import com.motosport.auth.domain.UserAccount;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 
-// Nota: a diferencia del otro proyecto (que firma con HMAC usando un secreto compartido
-// via jjwt), el JwtService de ms-motosport firma con RS256 usando un JwtEncoder de Spring
-// Security respaldado por un par de llaves RSA (ver JwtKeyConfig). Para testear sin depender
-// de archivos de llaves ni levantar el contexto de Spring, generamos un keypair RSA en memoria.
 class JwtServiceTest {
 
 	private static final long ACCESS_TOKEN_MINUTES = 30;
