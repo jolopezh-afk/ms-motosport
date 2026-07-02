@@ -81,7 +81,10 @@ class JwtServiceTest {
 
 		Jwt jwt = jwtDecoder.decode(token);
 
-		assertTrue(jwt.getIssuer().toString().contains(ISSUER));
+		// En Spring Security 7 el claim "iss" se obtiene como String
+		// para evitar la conversión automática a URI.
+		assertEquals(ISSUER, jwt.getClaimAsString("iss"));
+
 		assertTrue(jwt.getExpiresAt().isAfter(Instant.now()));
 		assertTrue(jwt.getExpiresAt().isAfter(jwt.getIssuedAt()));
 	}
