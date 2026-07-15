@@ -1,0 +1,83 @@
+@baseUrl = http://localhost:4001
+@rentsUrl = {{baseUrl}}/api/rents
+@authUrl = {{baseUrl}}/api/auth
+
+### =========================
+### AUTH ENDPOINTS
+### =========================
+
+### Registrar usuario
+POST {{authUrl}}/register
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "123456"
+}
+
+###
+
+### Login
+POST {{authUrl}}/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "123456"
+}
+
+###
+
+### Validar token
+GET {{authUrl}}/validate
+Authorization: Bearer TU_TOKEN_AQUI
+
+### =========================
+### ARRIENDOS ENDPOINTS
+### =========================
+
+### Obtener todos los rents
+GET {{rentsUrl}}
+Authorization: Bearer TU_TOKEN_AQUI
+
+###
+
+### Obtener rent por ID
+GET {{rentsUrl}}/1
+Authorization: Bearer TU_TOKEN_AQUI
+
+###
+
+### Crear rent
+POST {{rentsUrl}}
+Content-Type: application/json
+Authorization: Bearer TU_TOKEN_AQUI
+
+{
+  "bikeId": 1,
+  "customerId": 1,
+  "fechaInicio": "2026-05-27",
+  "fechaFin": "2026-05-30",
+  "observacion": "Rent de prueba"
+}
+
+###
+
+### Actualizar rent
+PUT {{rentsUrl}}/1
+Content-Type: application/json
+Authorization: Bearer TU_TOKEN_AQUI
+
+{
+  "bikeId": 1,
+  "customerId": 1,
+  "fechaInicio": "2026-05-27",
+  "fechaFin": "2026-06-02",
+  "observacion": "Rent actualizado"
+}
+
+###
+
+### Eliminar rent
+DELETE {{rentsUrl}}/1
+Authorization: Bearer TU_TOKEN_AQUI
